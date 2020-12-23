@@ -1,4 +1,6 @@
-;------------------------- REGLAS NITROGENO---------------------------
+; UNIVERSIDAD POLITECNICA SALESIANA
+;BASE DE CONOCMIENTOS
+;DIAGNOSTICO DE ESTADO DE PLANTAS
 
 (defrule nitrogeno1
 (La planta crece muy poco)
@@ -19,9 +21,6 @@
 =>
 (assert (La planta tiene hojas de color pardo rojizo))
 )
-
-
-;------------------------- REGLAS FOSFORO---------------------------
 
 
 (defrule fosforo1
@@ -51,9 +50,6 @@
 =>
 (assert (La planta tiene retraso de madurez))
 )
-
-
-;------------------------- REGLAS POTASIO---------------------------
 
 
 (defrule potasio1
