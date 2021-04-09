@@ -1,2 +1,3 @@
 # SISExpertos
-Código fuente de aplicaciones de la materia de sistemas expertos
+Archivos y Código fuente de aplicaciones
+Enfocada a la materia de sistemas expertos de la Universidad Politecnica Salesiana
