@@ -1,0 +1,49 @@
+------------------------> Similitud:
+
+MATCH (start:Persona)-[x:RATED]->(m:Pelicula)<-[y:RATED]-(end:Persona)
+WITH  SUM(x.rating * y.rating) AS xyDotProduct,
+      SQRT(REDUCE(xDot = 0.0, a IN COLLECT(x.rating) | xDot + a^2)) AS xLength,
+      SQRT(REDUCE(yDot = 0.0, b IN COLLECT(y.rating) | yDot + b^2)) AS yLength,
+      start, end
+MERGE (start)-[s:SIMILARITY]-(end)
+SET   s.similarity = xyDotProduct / (xLength * yLength)
+
+------------------------> Vecino mas cercano:
+
+MATCH    (start:Persona {name:'Atanasio'})-[s:SIMILARITY]-(end:Persona)
+WITH     end, s.similarity AS sim
+ORDER BY sim DESC
+LIMIT    5
+RETURN   end.name AS Neighbor, sim AS Similarity
+
+------------------------> Recomendar:
+
+MATCH    (b:Persona)-[r:RATED]->(m:Pelicula), (b)-[s:SIMILARITY]-(a:Persona {name:'Carmen'})
+WHERE    NOT((a)-[:RATED]->(m))
+WITH     m, s.similarity AS similarity, r.rating AS rating
+ORDER BY m.name, similarity DESC
+WITH     m.name AS pelicula, COLLECT(rating)[0..3] AS ratings
+WITH     pelicula, REDUCE(s = 0, i IN ratings | s + i)*1.0/20 AS reco
+ORDER BY reco DESC
+RETURN   pelicula AS Pelicula, reco AS Recommendation
+
+---------------------------------------------------------------------------------------------------------------------------
+CALL gds.graph.create(
+    'graphMovie',
+    {
+        Pelicula: {
+            label: 'Pelicula',
+            properties: 'ranking'
+        }
+    },
+    '*'
+);
+
+
+CALL gds.beta.knn.write.estimate('graphMovie', {
+  nodeWeightProperty: 'ranking',
+  writeRelationshipType: 'SIMILAR',
+  writeProperty: 'score',
+  topK: 1
+})
+YIELD nodeCount, bytesMin, bytesMax, requiredMemory
