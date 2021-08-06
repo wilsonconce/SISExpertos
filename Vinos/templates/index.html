@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calidad del Vino</title>
+    <style>
+        .input-field {
+            border: 1px grey solid;
+            padding: 5px;
+            color: purple;
+            background-color: #d8da3d
+        }
+
+        .content {
+            width: 500px;
+            float: left;
+            padding: 0 25px;
+
+        }
+
+
+        td, th{
+            text-align: center;
+            border: 1px grey solid;
+
+        }
+
+        tr.calidad > td {
+            border: 2px green solid;
+
+
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h4>DATOS NUEVO VINO</h4>
+        <form action="/calculo_similitud" method="POST">
+            <div class="input-field">
+                <label>Fixed Acidity</label>
+                <input name="fixed_acidity" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[0] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                <label>Volatile Acidity</label>
+                <input name="volatile_acidity" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[1] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                <label>Citric Acid</label>
+               <input name="citric_acid" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[2] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                <label>Residual Sugar</label>
+                <input name="residual_sugar" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[3] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                <label>Chlorides</label>
+                <input name="chlorides" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[4] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                <label>Free Sulfur Dioxide</label>
+                <input name="free_sulfur_dioxide" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[5] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                <label>Total_Sulfure_dioxide</label>
+                <input name="total_sulfur_dioxide" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[6] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                <label>Density</label>
+                <input name="density" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[7] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                <label>PH</label>
+                <input name="pH" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[8] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                 <label>Sulphates</label>
+                 <input name="sulphates" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[9] if valores else '' }}">
+            </div>
+            <div class="input-field">
+                <label>Alcohol</label>
+                <input name="alcohol" type="text" required="" pattern="([0-9]*\.)?[0-9]*" value="{{ valores[10] if valores else '' }}">
+            </div>
+            <button type="submit">CALCULAR</button>
+        </form>
+    </div>
+    <div class="content">
+        <h4>TABLA DE SIMILITUDES</h4>
+        <table>
+            <thead>
+              <tr>
+                  <th width="100px">Item</th>
+                  <th width="100px">Vino Calidad</th>
+                  <th width="200px">Vino Similitud</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for i in range(0, lista.__len__()) %}
+              <tr class="{{ 'calidad' if i == 0 else '' }}">
+                <td>{{ i + 1 }}</td>
+                <td>{{ lista[i].calidad }}</td>
+                <td>{{ lista[i].similitud }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
